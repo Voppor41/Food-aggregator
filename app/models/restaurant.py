@@ -9,7 +9,8 @@ class Restaurant(Base):
     name: Mapped[str] = mapped_column(String(100))
     rating: Mapped[float] = mapped_column(Float,default=0)
 
-    dishes: Mapped[list["Dish"]] = relationship(
+    dishes = relationship(
+        "Dish",
         back_populates="restaurant",
         cascade="all, delete-orphan"
     )

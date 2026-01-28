@@ -1,17 +1,17 @@
 from pydantic import BaseModel
-from app.schemas.dish import DishRead
 
 
 class RestaurantBase(BaseModel):
     name: str
+    rating: float | None = None
 
 
 class RestaurantCreate(RestaurantBase):
     pass
 
 
-class RestaurantRead(RestaurantBase):
+class RestaurantOut(RestaurantBase):
     id: int
-    dishes: list[DishRead] = []
 
-    model_config = {"from_attributes": True}
+    class Config:
+        from_attributes = True
