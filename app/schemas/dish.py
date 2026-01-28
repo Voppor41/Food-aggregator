@@ -1,10 +1,17 @@
 from pydantic import BaseModel
 
-class DishOut(BaseModel):
-    id: int
+
+class DishBase(BaseModel):
     name: str
     price: int
+
+
+class DishCreate(DishBase):
     restaurant_id: int
 
-    class Config:
-        from_attributes = True
+
+class DishRead(DishBase):
+    id: int
+    restaurant_id: int
+
+    model_config = {"from_attributes": True}
