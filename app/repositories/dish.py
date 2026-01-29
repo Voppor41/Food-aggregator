@@ -12,7 +12,9 @@ class DishRepository:
         return db.query(Dish).filter(Dish.restaurant_id == restaurant_id).all()
 
     @staticmethod
-    def create(db:Session, name: str, price: float, restaurant_id: int) -> Dish | None:
+    def create(db:Session, name: str, price: float, restaurant_id: int) -> Dish:
         dish = Dish(name=name, price=price, restaurant_id=restaurant_id)
         db.add(dish)
+        db.commit()
+        db.refresh(dish)
         return dish

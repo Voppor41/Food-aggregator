@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.schemas.dish import DishCreate, DishOut
+from app.schemas.dish import DishCreate, DishOut, DishRead
 from app.services.dish import DishService
 
 router = APIRouter(
@@ -27,7 +27,7 @@ def get_dishes_by_restaurant(
     return DishService.list_by_restaurant(db, restaurant_id)
 
 
-@router.post("/", response_model=DishOut)
+@router.post("/", response_model=DishRead)
 def create_dish(
     dish: DishCreate,
     db: Session = Depends(get_db),

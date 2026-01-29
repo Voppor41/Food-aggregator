@@ -5,6 +5,15 @@ class DishBase(BaseModel):
     name: str
     price: float
 
+class DishRead(BaseModel):
+    id: int
+    name: str
+    price: float
+    restaurant_id: int
+
+    class Config:
+        from_attributes = True
+
 
 class DishCreate(DishBase):
     restaurant_id: int
