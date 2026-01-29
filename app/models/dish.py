@@ -7,7 +7,7 @@ class Dish(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
-    price: Mapped[int]
+    price: Mapped[float]
 
     restaurant_id: Mapped[int] = mapped_column(
         ForeignKey("restaurants.id", ondelete="CASCADE"),

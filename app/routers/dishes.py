@@ -1,39 +1,40 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.models.dish import Dish
-from app.schemas.dish import DishCreate, DishRead
+from app.schemas.dish import DishCreate, DishOut
+from app.services.dish import DishService
 
 router = APIRouter(
     prefix="/dishes",
-    tags=["Dishes"]
+    tags=["Dishes"],
 )
 
 
-@router.post("/", response_model=DishRead)
-def create_dish(
-    dish_in: DishCreate,
-    db: Session = Depends(get_db)
-):
-    dish = Dish(**dish_in.model_dump())
-    db.add(dish)
-    db.commit()
-    db.refresh(dish)
-    return dish
-
-
-@router.get("/", response_model=list[DishRead])
+@router.get("/", response_model=list[DishOut])
 def get_dishes(db: Session = Depends(get_db)):
-    return db.query(Dish).all()
+    return DishService.list_dishes(db)
 
 
-@router.get("/{dish_id}", response_model=DishRead)
-def get_dish(
-    dish_id: int,
-    db: Session = Depends(get_db)
+@router.get(
+    "/restaurant/{restaurant_id}",
+    response_model=list[DishOut],
+)
+def get_dishes_by_restaurant(
+    restaurant_id: int,
+    db: Session = Depends(get_db),
 ):
-    dish = db.query(Dish).get(dish_id)
-    if not dish:
-        raise HTTPException(status_code=404, detail="Dish not found")
-    return dish
+    return DishService.list_by_restaurant(db, restaurant_id)
+
+
+@router.post("/", response_model=DishOut)
+def create_dish(
+    dish: DishCreate,
+    db: Session = Depends(get_db),
+):
+    return DishService.create_dish(
+        db,
+        name=dish.name,
+        price=dish.price,
+        restaurant_id=dish.restaurant_id,
+    )

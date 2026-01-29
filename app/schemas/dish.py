@@ -3,15 +3,16 @@ from pydantic import BaseModel
 
 class DishBase(BaseModel):
     name: str
-    price: int
+    price: float
 
 
 class DishCreate(DishBase):
     restaurant_id: int
 
 
-class DishRead(DishBase):
+class DishOut(DishBase):
     id: int
     restaurant_id: int
 
-    model_config = {"from_attributes": True}
+    class Config:
+        from_attributes = True
