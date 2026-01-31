@@ -17,3 +17,9 @@ class Dish(Base):
     restaurant: Mapped["Restaurant"] = relationship(
         back_populates="dishes"
     )
+
+    favorites = relationship(
+        "Favorite",
+        back_populates="dish",
+        cascade="all, delete-orphan"
+    )
